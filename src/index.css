@@ -1,6 +1,6 @@
-@import "tailwindcss";
-
-@custom-variant dark (&:is(.dark *));
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /*
  * Design Philosophy: Warm & Approachable
@@ -10,102 +10,36 @@
  * - Feel: "安心感" "信頼感" "私にもできそう" "少し先の憧れ"
  */
 
-@theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  
+:root {
   /* Custom colors - Warm feminine palette */
-  --color-ivory: oklch(0.97 0.01 90);
-  --color-beige: oklch(0.92 0.02 80);
-  --color-beige-dark: oklch(0.85 0.03 75);
-  --color-dusty-pink: oklch(0.82 0.06 15);
-  --color-dusty-pink-light: oklch(0.92 0.04 15);
-  --color-coral: oklch(0.70 0.15 25);
-  --color-coral-light: oklch(0.78 0.12 25);
-  --color-warm-brown: oklch(0.45 0.05 50);
-  --color-warm-gray: oklch(0.55 0.02 60);
-  
+  --color-ivory: #f9f7f4;
+  --color-beige: #ebe6dd;
+  --color-beige-dark: #d8cfc1;
+  --color-dusty-pink: #e8d5d5;
+  --color-dusty-pink-light: #f5eded;
+  --color-coral: #e88673;
+  --color-coral-light: #f0a998;
+  --color-warm-brown: #5c4a3a;
+  --color-warm-gray: #8a7d70;
+
   /* Typography */
   --font-body: "Zen Maru Gothic", "Rounded Mplus 1c", "Hiragino Maru Gothic Pro", sans-serif;
   --font-accent: "Caveat", "Klee One", cursive;
-}
 
-:root {
-  --primary: oklch(0.70 0.15 25); /* Coral - CTA color */
-  --primary-foreground: oklch(1 0 0); /* White */
-  --sidebar-primary: oklch(0.70 0.15 25);
-  --sidebar-primary-foreground: oklch(1 0 0);
-  --chart-1: oklch(0.82 0.06 15);
-  --chart-2: oklch(0.70 0.15 25);
-  --chart-3: oklch(0.92 0.02 80);
-  --chart-4: oklch(0.55 0.02 60);
-  --chart-5: oklch(0.45 0.05 50);
   --radius: 1.25rem;
-  --background: oklch(0.97 0.01 90); /* Ivory */
-  --foreground: oklch(0.35 0.03 50); /* Warm brown text */
-  --card: oklch(1 0 0); /* White */
-  --card-foreground: oklch(0.35 0.03 50);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.35 0.03 50);
-  --secondary: oklch(0.92 0.04 15); /* Dusty pink light */
-  --secondary-foreground: oklch(0.35 0.03 50);
-  --muted: oklch(0.92 0.02 80); /* Beige */
-  --muted-foreground: oklch(0.55 0.02 60); /* Warm gray */
-  --accent: oklch(0.92 0.04 15);
-  --accent-foreground: oklch(0.35 0.03 50);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.88 0.02 80);
-  --input: oklch(0.88 0.02 80);
-  --ring: oklch(0.70 0.15 25);
-  --sidebar: oklch(0.97 0.01 90);
-  --sidebar-foreground: oklch(0.35 0.03 50);
-  --sidebar-accent: oklch(0.92 0.02 80);
-  --sidebar-accent-foreground: oklch(0.35 0.03 50);
-  --sidebar-border: oklch(0.88 0.02 80);
-  --sidebar-ring: oklch(0.70 0.15 25);
+  --background: var(--color-ivory);
+  --foreground: var(--color-warm-brown);
+  --card: #ffffff;
+  --card-foreground: var(--color-warm-brown);
+  --primary: var(--color-coral);
+  --primary-foreground: #ffffff;
+  --border: var(--color-beige-dark);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: var(--font-body);
     font-weight: 400;
   }
@@ -122,7 +56,7 @@
   select:not(:disabled),
   input[type="checkbox"]:not(:disabled),
   input[type="radio"]:not(:disabled) {
-    @apply cursor-pointer;
+    cursor: pointer;
   }
 }
 
