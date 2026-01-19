@@ -17,9 +17,11 @@ import {
   CheckCircle2,
   ArrowRight,
   Calendar,
+  Laptop,
   Smartphone,
   FileText,
   Heart,
+  Star,
   ChevronRight,
   Check,
   X,
@@ -43,8 +45,8 @@ export default function Home() {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
 
   const toggleCheck = (index: number) => {
-    setCheckedItems(prev => 
-      prev.includes(index) 
+    setCheckedItems(prev =>
+      prev.includes(index)
         ? prev.filter(i => i !== index)
         : [...prev, index]
     );
@@ -73,7 +75,7 @@ export default function Home() {
       {/* S1: Hero Section */}
       <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-dusty-pink-light/30 to-ivory -z-10" />
-        
+
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div {...fadeInUp} className="order-2 lg:order-1">
@@ -92,15 +94,15 @@ export default function Home() {
                 <span className="bg-beige px-3 py-1.5 rounded-full">会社員・パート</span>
                 <span className="bg-beige px-3 py-1.5 rounded-full">完全未経験OK</span>
               </div>
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-coral hover:bg-coral/90 text-white rounded-full px-8 py-6 text-lg font-medium shadow-soft-lg group"
               >
                 無料個別相談の空き枠を見る
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </motion.div>
-            
+
             <motion.div
               {...fadeInUp}
               transition={{ delay: 0.15, duration: 0.5 }}
@@ -140,7 +142,7 @@ export default function Home() {
               こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、抱えていませんか？
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-2xl mx-auto space-y-4 mb-12">
             {[
               "副業に興味はあるけど、何から始めればいいか分からない",
@@ -163,7 +165,7 @@ export default function Home() {
               </label>
             ))}
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-2xl mx-auto">
             <div className="bg-beige/50 rounded-3xl p-6 md:p-8">
               <p className="text-warm-brown leading-relaxed">
@@ -187,7 +189,7 @@ export default function Home() {
               <span className="text-coral">"自分のペースで稼ぐ力"</span>を持つ<br />
               女性を増やすための、動画編集スクールです。
             </h2>
-            
+
             <div className="grid md:grid-cols-2 gap-6 text-left">
               <div className="bg-white rounded-2xl p-6 shadow-soft">
                 <div className="flex items-center gap-2 mb-3">
@@ -221,7 +223,7 @@ export default function Home() {
               3ヶ月後、あなたはこう変わる
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
             {/* Before/After Image */}
             <div className="rounded-3xl overflow-hidden shadow-soft-lg mb-10">
@@ -231,7 +233,7 @@ export default function Home() {
                 className="w-full h-auto"
               />
             </div>
-            
+
             {/* Before */}
             <div className="bg-beige/50 rounded-2xl p-6 mb-6">
               <div className="flex items-center gap-3 mb-3">
@@ -240,7 +242,7 @@ export default function Home() {
               </div>
               <p className="text-warm-brown italic">"何からやればいいか分からない…"</p>
             </div>
-            
+
             {/* After - 3 levels */}
             <div className="space-y-4">
               {[
@@ -289,12 +291,12 @@ export default function Home() {
               未経験からでも安心！<br className="md:hidden" />ゴールから逆算した8週間プログラム
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <div className="relative">
               {/* Timeline line */}
               <div className="absolute left-6 md:left-8 top-0 bottom-0 w-0.5 bg-dusty-pink" />
-              
+
               {[
                 {
                   week: "1〜2週目",
@@ -326,7 +328,7 @@ export default function Home() {
                   <div className="absolute left-3 md:left-5 top-0 w-6 h-6 md:w-8 md:h-8 bg-coral rounded-full flex items-center justify-center shadow-soft">
                     <phase.icon className="h-3 w-3 md:h-4 md:w-4 text-white" />
                   </div>
-                  
+
                   <div className="bg-white rounded-2xl p-5 md:p-6 shadow-soft">
                     <span className="text-coral font-medium text-sm">{phase.week}</span>
                     <h3 className="text-lg md:text-xl text-warm-brown font-medium mt-1 mb-2">{phase.title}</h3>
@@ -348,7 +350,7 @@ export default function Home() {
               あなたが挫折しないための、<br className="md:hidden" />4つのサポート体制
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               {
@@ -383,7 +385,7 @@ export default function Home() {
               </Card>
             ))}
           </motion.div>
-          
+
           {/* Online class image */}
           <motion.div {...fadeInUp} className="mt-12 max-w-3xl mx-auto">
             <div className="rounded-3xl overflow-hidden shadow-soft-lg">
@@ -406,7 +408,7 @@ export default function Home() {
               受講にあたってのご案内
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-2xl mx-auto">
             {/* 向いている人 */}
             <div className="bg-white rounded-2xl p-6 shadow-soft">
@@ -441,7 +443,7 @@ export default function Home() {
             </h2>
             <p className="text-sm text-warm-gray">※これは、あなたかもしれない未来の物語です。</p>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <div className="bg-dusty-pink-light/30 rounded-3xl p-6 md:p-8">
               {/* Profile */}
@@ -458,7 +460,7 @@ export default function Home() {
                   <p className="text-sm text-warm-gray">フルタイム勤務</p>
                 </div>
               </div>
-              
+
               {/* Before */}
               <div className="bg-white rounded-2xl p-5 mb-4">
                 <p className="text-sm text-warm-gray mb-2">Before</p>
@@ -466,7 +468,7 @@ export default function Home() {
                   「フルタイム事務職で、帰宅後はスマホでSNSを見て終わる毎日。将来のために何かしたいけど、何をすればいいか分からず焦っていました。」
                 </p>
               </div>
-              
+
               {/* After */}
               <div className="bg-coral/10 rounded-2xl p-5 mb-6 border-2 border-coral/20">
                 <p className="text-sm text-coral mb-2">After</p>
@@ -474,7 +476,7 @@ export default function Home() {
                   「週3日・夜1時間の編集作業で、<strong className="text-coral">月1万5,000円の副収入を達成！</strong>今はそのお金を推し活の資金にしています。自分で稼いだお金で楽しむ時間は最高です！」
                 </p>
               </div>
-              
+
               {/* Timeline */}
               <div className="space-y-3">
                 <p className="text-sm text-warm-gray font-medium">学習タイムライン</p>
@@ -503,7 +505,7 @@ export default function Home() {
               料金プラン
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-lg mx-auto">
             <Card className="border-2 border-coral shadow-soft-lg overflow-hidden">
               <div className="bg-coral text-white text-center py-3">
@@ -516,7 +518,7 @@ export default function Home() {
                   </p>
                   <p className="text-sm text-warm-gray mt-1">（税込）</p>
                 </div>
-                
+
                 <div className="space-y-3 mb-8">
                   <p className="text-sm text-warm-gray font-medium">含まれるもの：</p>
                   {[
@@ -533,19 +535,19 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                
+
                 <div className="bg-beige/50 rounded-xl p-4 mb-6">
                   <p className="text-sm text-warm-gray mb-2">お支払い方法</p>
                   <p className="text-sm text-warm-brown">・クレジットカード<br />・銀行振込</p>
                   <p className="text-xs text-warm-gray mt-2">※カード会社の分割払いもご利用いただけます。</p>
                 </div>
-                
+
                 <Button className="w-full bg-coral hover:bg-coral/90 text-white rounded-full py-6 text-lg font-medium shadow-soft-lg">
                   無料個別相談に申し込む
                 </Button>
               </CardContent>
             </Card>
-            
+
             <div className="mt-6 text-center">
               <p className="text-sm text-warm-gray">
                 卒業後は、月額3,000円のオンライン部室で継続参加も可能です。
@@ -564,7 +566,7 @@ export default function Home() {
               受講開始までの簡単5ステップ
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             {[
               { step: 1, title: "無料個別相談", description: "まずは無料個別相談にお申し込みください。（30〜45分／オンライン）不安なことは何でも聞いてください。" },
@@ -601,7 +603,7 @@ export default function Home() {
               よくあるご質問
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <Accordion type="single" collapsible className="space-y-3">
               {[
@@ -649,7 +651,7 @@ export default function Home() {
               講師紹介
             </h2>
           </motion.div>
-          
+
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-[200px_1fr] gap-8 items-start">
               <div className="mx-auto md:mx-0">
@@ -661,11 +663,11 @@ export default function Home() {
                   />
                 </div>
               </div>
-              
+
               <div>
                 <h3 className="text-xl text-warm-brown font-medium mb-1">◯◯ ◯◯</h3>
                 <p className="text-coral text-sm mb-4">女性向け動画編集・副業サポーター</p>
-                
+
                 <div className="space-y-2 mb-6">
                   {[
                     "元ブラック企業勤務の営業職",
@@ -680,7 +682,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             {/* Message */}
             <div className="mt-8 bg-dusty-pink-light/40 rounded-3xl p-6 md:p-8 relative">
               <div className="absolute -top-3 left-8 bg-coral text-white text-sm px-4 py-1 rounded-full">
@@ -712,8 +714,8 @@ export default function Home() {
               そんな疑問や不安を、講師に直接相談できます。<br />
               無理な勧誘は一切ありませんので、お気軽にどうぞ。
             </p>
-            <Button 
-              size="lg" 
+            <Button
+              size="lg"
               className="bg-coral hover:bg-coral/90 text-white rounded-full px-10 py-6 text-lg font-medium shadow-soft-lg group"
             >
               無料個別相談の空き枠を見る
@@ -736,7 +738,7 @@ export default function Home() {
               <p><strong>返金方針：</strong>お申込み後の自己都合によるキャンセル・返金はお受けしておりません。サービスの品質に重大な不備があった場合のみ、個別にご相談を承ります。</p>
               <p><strong>禁止事項：</strong>他の受講生への誹謗中傷・勧誘行為・教材の無断転載などがあった場合、強制的に退会いただくことがあります。</p>
             </div>
-            
+
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <p className="text-warm-brown font-medium">動画編集スクール</p>
               <nav className="flex flex-wrap justify-center gap-4 text-xs text-warm-gray">
@@ -746,7 +748,7 @@ export default function Home() {
                 <a href="#" className="hover:text-coral transition-colors">お問い合わせ</a>
               </nav>
             </div>
-            
+
             <div className="mt-6 text-center">
               <p className="text-xs text-warm-gray">© 2025 動画編集スクール. All rights reserved.</p>
             </div>
