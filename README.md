@@ -12,14 +12,20 @@
 
 ## 🚀 デプロイ
 
-### Vercelでデプロイ（推奨）
+### GitHub Pagesでデプロイ（完全無料・推奨）
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/uto1716/VideoSchool)
+1. GitHubリポジトリの「Settings」タブを開く
+2. 左メニューから「Pages」を選択
+3. 「Source」を「GitHub Actions」に変更
+4. mainブランチにpushすると自動的にデプロイされます
 
-1. 上のボタンをクリック
-2. GitHubアカウントでログイン
-3. リポジトリをインポート
-4. 自動的にビルド・デプロイされます
+**公開URL**: https://uto1716.github.io/VideoSchool/
+
+### その他の無料デプロイオプション
+
+- **Vercel**: 無料プランあり（Hobby）
+- **Netlify**: 無料プランあり
+- **Cloudflare Pages**: 無料プランあり
 
 ## 💻 ローカル開発
 
@@ -62,7 +68,7 @@ VideoSchool/
 ## 🔗 リンク
 
 - **GitHubリポジトリ**: https://github.com/uto1716/VideoSchool
-- **デプロイURL**: Vercelでデプロイ後に自動生成されます
+- **公開URL**: https://uto1716.github.io/VideoSchool/
 
 ---
 
