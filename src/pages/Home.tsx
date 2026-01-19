@@ -109,7 +109,7 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden shadow-soft-lg">
                   <img
-                    src="/images/hero-new.jpg"
+                    src="/VideoSchool/images/hero-new.jpg"
                     alt="自宅で動画編集を学ぶ女性"
                     className="w-full h-auto object-cover"
                   />
@@ -226,7 +226,7 @@ export default function Home() {
             {/* Before/After Image */}
             <div className="rounded-3xl overflow-hidden shadow-soft-lg mb-10">
               <img
-                src="/images/before-after.jpg"
+                src="/VideoSchool/images/before-after.jpg"
                 alt="ビフォーアフター：会社員からフリーランスへ"
                 className="w-full h-auto"
               />
@@ -388,7 +388,7 @@ export default function Home() {
           <motion.div {...fadeInUp} className="mt-12 max-w-3xl mx-auto">
             <div className="rounded-3xl overflow-hidden shadow-soft-lg">
               <img
-                src="/images/online-class.jpg"
+                src="/VideoSchool/images/online-class.jpg"
                 alt="オンラインで一緒に学ぶ仲間たち"
                 className="w-full h-auto"
               />
@@ -448,7 +448,7 @@ export default function Home() {
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full overflow-hidden">
                   <img
-                    src="/images/student-story.jpg"
+                    src="/VideoSchool/images/student-story.jpg"
                     alt="Aさん"
                     className="w-full h-full object-cover"
                   />
@@ -655,7 +655,7 @@ export default function Home() {
               <div className="mx-auto md:mx-0">
                 <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg">
                   <img
-                    src="/images/instructor-new.jpg"
+                    src="/VideoSchool/images/instructor-new.jpg"
                     alt="講師"
                     className="w-full h-full object-cover"
                   />
