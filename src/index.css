@@ -1,0 +1,281 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design Philosophy: Warm & Approachable
+ * Based on the design brief:
+ * - Colors: Beige, dusty pink, ivory as base / Coral pink, orange as accent for CTAs
+ * - Fonts: Rounded gothic for body, handwritten accent for warmth
+ * - Feel: "安心感" "信頼感" "私にもできそう" "少し先の憧れ"
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  
+  /* Custom colors - Warm feminine palette */
+  --color-ivory: oklch(0.97 0.01 90);
+  --color-beige: oklch(0.92 0.02 80);
+  --color-beige-dark: oklch(0.85 0.03 75);
+  --color-dusty-pink: oklch(0.82 0.06 15);
+  --color-dusty-pink-light: oklch(0.92 0.04 15);
+  --color-coral: oklch(0.70 0.15 25);
+  --color-coral-light: oklch(0.78 0.12 25);
+  --color-warm-brown: oklch(0.45 0.05 50);
+  --color-warm-gray: oklch(0.55 0.02 60);
+  
+  /* Typography */
+  --font-body: "Zen Maru Gothic", "Rounded Mplus 1c", "Hiragino Maru Gothic Pro", sans-serif;
+  --font-accent: "Caveat", "Klee One", cursive;
+}
+
+:root {
+  --primary: oklch(0.70 0.15 25); /* Coral - CTA color */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --sidebar-primary: oklch(0.70 0.15 25);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --chart-1: oklch(0.82 0.06 15);
+  --chart-2: oklch(0.70 0.15 25);
+  --chart-3: oklch(0.92 0.02 80);
+  --chart-4: oklch(0.55 0.02 60);
+  --chart-5: oklch(0.45 0.05 50);
+  --radius: 1.25rem;
+  --background: oklch(0.97 0.01 90); /* Ivory */
+  --foreground: oklch(0.35 0.03 50); /* Warm brown text */
+  --card: oklch(1 0 0); /* White */
+  --card-foreground: oklch(0.35 0.03 50);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.35 0.03 50);
+  --secondary: oklch(0.92 0.04 15); /* Dusty pink light */
+  --secondary-foreground: oklch(0.35 0.03 50);
+  --muted: oklch(0.92 0.02 80); /* Beige */
+  --muted-foreground: oklch(0.55 0.02 60); /* Warm gray */
+  --accent: oklch(0.92 0.04 15);
+  --accent-foreground: oklch(0.35 0.03 50);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.88 0.02 80);
+  --input: oklch(0.88 0.02 80);
+  --ring: oklch(0.70 0.15 25);
+  --sidebar: oklch(0.97 0.01 90);
+  --sidebar-foreground: oklch(0.35 0.03 50);
+  --sidebar-accent: oklch(0.92 0.02 80);
+  --sidebar-accent-foreground: oklch(0.35 0.03 50);
+  --sidebar-border: oklch(0.88 0.02 80);
+  --sidebar-ring: oklch(0.70 0.15 25);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    font-weight: 400;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-body);
+    font-weight: 500;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  [type="reset"]:not(:disabled),
+  a[href],
+  select:not(:disabled),
+  input[type="checkbox"]:not(:disabled),
+  input[type="radio"]:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1200px;
+    }
+  }
+  
+  /* Custom utility classes */
+  .font-body {
+    font-family: var(--font-body);
+  }
+  
+  .font-accent {
+    font-family: var(--font-accent);
+  }
+  
+  /* Color utilities */
+  .text-ivory { color: var(--color-ivory); }
+  .bg-ivory { background-color: var(--color-ivory); }
+  .text-beige { color: var(--color-beige); }
+  .bg-beige { background-color: var(--color-beige); }
+  .text-beige-dark { color: var(--color-beige-dark); }
+  .bg-beige-dark { background-color: var(--color-beige-dark); }
+  .text-dusty-pink { color: var(--color-dusty-pink); }
+  .bg-dusty-pink { background-color: var(--color-dusty-pink); }
+  .bg-dusty-pink-light { background-color: var(--color-dusty-pink-light); }
+  .text-coral { color: var(--color-coral); }
+  .bg-coral { background-color: var(--color-coral); }
+  .bg-coral-light { background-color: var(--color-coral-light); }
+  .text-warm-brown { color: var(--color-warm-brown); }
+  .text-warm-gray { color: var(--color-warm-gray); }
+  .border-coral { border-color: var(--color-coral); }
+  .border-beige { border-color: var(--color-beige); }
+  .border-dusty-pink { border-color: var(--color-dusty-pink); }
+  
+  /* Soft shadow for cards */
+  .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 8px -2px rgba(0, 0, 0, 0.03);
+  }
+  
+  .shadow-soft-lg {
+    box-shadow: 0 8px 40px -4px rgba(0, 0, 0, 0.07), 0 4px 16px -4px rgba(0, 0, 0, 0.04);
+  }
+  
+  /* CTA button style */
+  .btn-cta {
+    background: linear-gradient(135deg, var(--color-coral) 0%, var(--color-coral-light) 100%);
+    color: white;
+    font-weight: 600;
+    border-radius: 9999px;
+    padding: 1rem 2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Section divider */
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--color-beige-dark), transparent);
+  }
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* Checkbox styling for the concerns section */
+.concern-checkbox {
+  appearance: none;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--color-dusty-pink);
+  border-radius: 0.25rem;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.concern-checkbox:checked {
+  background: var(--color-coral);
+  border-color: var(--color-coral);
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
+}
