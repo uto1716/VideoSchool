@@ -1,0 +1,3 @@
+# VideoSchool
+
+このリポジトリはVideoSchoolプロジェクトです。
