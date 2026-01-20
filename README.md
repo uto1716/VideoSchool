@@ -43,6 +43,39 @@ npm run build
 npm run preview
 ```
 
+## 🔧 開発ワークフロー
+
+このプロジェクトは **Git Flow** に基づいたブランチ戦略を採用しています。
+
+### ブランチ構成
+
+- **main**: 本番環境用（リリース済みの安定版）
+- **develop**: 開発用（日常的な開発作業）
+- **feature/機能名**: 新機能開発用
+
+### 基本的な開発フロー
+
+```bash
+# 新機能を開発
+git checkout develop
+git checkout -b feature/機能名
+# ... 開発作業 ...
+git add .
+git commit -m "機能の説明"
+
+# develop にマージ
+git checkout develop
+git merge feature/機能名
+git push origin develop
+
+# リリース時は develop → main にマージ
+git checkout main
+git merge develop
+git push origin main  # GitHub Pages に自動デプロイ
+```
+
+詳細は [DEVELOPMENT.md](./DEVELOPMENT.md) を参照してください。
+
 ## 📁 プロジェクト構造
 
 ```
