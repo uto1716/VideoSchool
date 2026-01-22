@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/VideoSchool/',
+  base: '/', // Vercel用に変更（独自ドメイン使用）
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
