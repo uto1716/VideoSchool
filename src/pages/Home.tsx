@@ -43,6 +43,7 @@ const fadeInUp = {
 
 export default function Home() {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
+  const [showLineModal, setShowLineModal] = useState(false);
 
   const toggleCheck = (index: number) => {
     setCheckedItems(prev =>
@@ -66,7 +67,10 @@ export default function Home() {
             <a href="#price" className="text-warm-gray hover:text-coral transition-colors">料金</a>
             <a href="#faq" className="text-warm-gray hover:text-coral transition-colors">よくある質問</a>
           </nav>
-          <Button className="bg-coral hover:bg-coral/90 text-white rounded-full px-5 py-2 text-sm font-medium shadow-soft">
+          <Button
+            onClick={() => setShowLineModal(true)}
+            className="bg-coral hover:bg-coral/90 text-white rounded-full px-5 py-2 text-sm font-medium shadow-soft"
+          >
             無料相談を予約
           </Button>
         </div>
@@ -96,6 +100,7 @@ export default function Home() {
               </div>
               <Button
                 size="lg"
+                onClick={() => setShowLineModal(true)}
                 className="bg-coral hover:bg-coral/90 text-white rounded-full px-8 py-6 text-lg font-medium shadow-soft-lg group"
               >
                 無料個別相談の空き枠を見る
@@ -111,7 +116,7 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden shadow-soft-lg">
                   <img
-                    src="/VideoSchool/images/hero-new.jpg"
+                    src="/images/hero-new.jpg"
                     alt="自宅で動画編集を学ぶ女性"
                     className="w-full h-auto object-cover"
                   />
@@ -228,7 +233,7 @@ export default function Home() {
             {/* Before/After Image */}
             <div className="rounded-3xl overflow-hidden shadow-soft-lg mb-10">
               <img
-                src="/VideoSchool/images/before-after.jpg"
+                src="/images/before-after.jpg"
                 alt="ビフォーアフター：会社員からフリーランスへ"
                 className="w-full h-auto"
               />
@@ -390,7 +395,7 @@ export default function Home() {
           <motion.div {...fadeInUp} className="mt-12 max-w-3xl mx-auto">
             <div className="rounded-3xl overflow-hidden shadow-soft-lg">
               <img
-                src="/VideoSchool/images/online-class.jpg"
+                src="/images/online-class.jpg"
                 alt="オンラインで一緒に学ぶ仲間たち"
                 className="w-full h-auto"
               />
@@ -450,7 +455,7 @@ export default function Home() {
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full overflow-hidden">
                   <img
-                    src="/VideoSchool/images/student-story.jpg"
+                    src="/images/student-story.jpg"
                     alt="Aさん"
                     className="w-full h-full object-cover"
                   />
@@ -542,7 +547,10 @@ export default function Home() {
                   <p className="text-xs text-warm-gray mt-2">※カード会社の分割払いもご利用いただけます。</p>
                 </div>
 
-                <Button className="w-full bg-coral hover:bg-coral/90 text-white rounded-full py-6 text-lg font-medium shadow-soft-lg">
+                <Button
+                  onClick={() => setShowLineModal(true)}
+                  className="w-full bg-coral hover:bg-coral/90 text-white rounded-full py-6 text-lg font-medium shadow-soft-lg"
+                >
                   無料個別相談に申し込む
                 </Button>
               </CardContent>
@@ -657,7 +665,7 @@ export default function Home() {
               <div className="mx-auto md:mx-0">
                 <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg">
                   <img
-                    src="/VideoSchool/images/instructor-new.jpg"
+                    src="/images/instructor-new.jpg"
                     alt="講師"
                     className="w-full h-full object-cover"
                   />
@@ -716,6 +724,7 @@ export default function Home() {
             </p>
             <Button
               size="lg"
+              onClick={() => setShowLineModal(true)}
               className="bg-coral hover:bg-coral/90 text-white rounded-full px-10 py-6 text-lg font-medium shadow-soft-lg group"
             >
               無料個別相談の空き枠を見る
@@ -755,6 +764,51 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* LINE QR Code Modal */}
+      {showLineModal && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={() => setShowLineModal(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="bg-white rounded-3xl p-8 mx-4 max-w-sm w-full shadow-soft-lg text-center relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowLineModal(false)}
+              className="absolute top-4 right-4 text-warm-gray hover:text-warm-brown transition-colors"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <div className="mb-4">
+              <div className="w-16 h-16 bg-[#06C755] rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl text-warm-brown font-medium mb-2">
+                公式LINEで無料相談
+              </h3>
+              <p className="text-warm-gray text-sm">
+                QRコードを読み取って、<br />お気軽にご相談ください
+              </p>
+            </div>
+            <div className="bg-white rounded-2xl p-4 border-2 border-beige inline-block mb-4">
+              <img
+                src="https://qr-official.line.me/gs/M_598lriss_GW.png?oat_content=qr"
+                alt="LINE公式アカウント QRコード"
+                className="w-48 h-48"
+              />
+            </div>
+            <p className="text-xs text-warm-gray">
+              スマートフォンのカメラまたは<br />LINEアプリで読み取ってください
+            </p>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
