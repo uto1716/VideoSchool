@@ -66,6 +66,7 @@ export default function Home() {
             <a href="#support" className="text-warm-gray hover:text-coral transition-colors">サポート</a>
             <a href="#price" className="text-warm-gray hover:text-coral transition-colors">料金</a>
             <a href="#faq" className="text-warm-gray hover:text-coral transition-colors">よくある質問</a>
+            <a href="/blog" className="text-warm-gray hover:text-coral transition-colors">ブログ</a>
           </nav>
           <Button
             onClick={() => setShowLineModal(true)}
@@ -755,6 +756,7 @@ export default function Home() {
                 <a href="#" className="hover:text-coral transition-colors underline">プライバシーポリシー</a>
                 <a href="#" className="hover:text-coral transition-colors">特定商取引法に基づく表記</a>
                 <a href="#" className="hover:text-coral transition-colors">お問い合わせ</a>
+                <a href="/blog" className="hover:text-coral transition-colors">ブログ</a>
               </nav>
             </div>
 
