@@ -10,7 +10,7 @@ export const client = createClient({
 // ブログの型定義
 export type Blog = {
   title: string;
-  body: string;
+  content: string;
   eyecatch?: MicroCMSImage;
   category?: Category;
 } & MicroCMSListContent;

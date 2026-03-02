@@ -99,7 +99,7 @@ export default function BlogDetail() {
               {/* Body */}
               <div
                 className="blog-body text-warm-brown leading-loose"
-                dangerouslySetInnerHTML={{ __html: blog.body }}
+                dangerouslySetInnerHTML={{ __html: blog.content }}
               />
 
               {/* Bottom navigation */}
