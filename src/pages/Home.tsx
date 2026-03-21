@@ -58,8 +58,8 @@ export default function Home() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-ivory/90 backdrop-blur-md border-b border-beige">
         <div className="container flex items-center justify-between h-16 md:h-18">
-          <a href="#" className="text-lg md:text-xl text-warm-brown font-medium">
-            動画編集スクール
+          <a href="#">
+            <img src="/images/movicre-logo.png" alt="movicre" className="h-12 md:h-14" />
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <a href="#curriculum" className="text-warm-gray hover:text-coral transition-colors">カリキュラム</a>
@@ -739,30 +739,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* S13: Footer / Policy */}
+      {/* Policy Section */}
+      <section className="py-8 bg-beige/30">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-xs text-warm-gray space-y-2">
+            <p><strong>返金方針：</strong>お申込み後の自己都合によるキャンセル・返金はお受けしておりません。サービスの品質に重大な不備があった場合のみ、個別にご相談を承ります。</p>
+            <p><strong>禁止事項：</strong>他の受講生への誹謗中傷・勧誘行為・教材の無断転載などがあった場合、強制的に退会いただくことがあります。</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
       <footer className="py-8 bg-beige/50 border-t border-beige">
         <div className="container">
-          <div className="max-w-3xl mx-auto">
-            {/* Policy summary */}
-            <div className="text-xs text-warm-gray mb-6 space-y-2">
-              <p><strong>返金方針：</strong>お申込み後の自己都合によるキャンセル・返金はお受けしておりません。サービスの品質に重大な不備があった場合のみ、個別にご相談を承ります。</p>
-              <p><strong>禁止事項：</strong>他の受講生への誹謗中傷・勧誘行為・教材の無断転載などがあった場合、強制的に退会いただくことがあります。</p>
-            </div>
-
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-              <p className="text-warm-brown font-medium">動画編集スクール</p>
-              <nav className="flex flex-wrap justify-center gap-4 text-xs text-warm-gray">
-                <a href="#" className="hover:text-coral transition-colors underline">利用規約</a>
-                <a href="#" className="hover:text-coral transition-colors underline">プライバシーポリシー</a>
-                <a href="#" className="hover:text-coral transition-colors">特定商取引法に基づく表記</a>
-                <a href="#" className="hover:text-coral transition-colors">お問い合わせ</a>
-                <a href="/blog" className="hover:text-coral transition-colors">ブログ</a>
-              </nav>
-            </div>
-
-            <div className="mt-6 text-center">
-              <p className="text-xs text-warm-gray">© 2025 動画編集スクール. All rights reserved.</p>
-            </div>
+          <div className="flex flex-col items-center gap-6">
+            <img src="/images/movicre-logo.png" alt="movicre" className="h-12" />
+            <nav className="flex flex-wrap justify-center gap-4 text-xs text-warm-gray">
+              <a href="#" className="hover:text-coral transition-colors underline">利用規約</a>
+              <a href="#" className="hover:text-coral transition-colors underline">プライバシーポリシー</a>
+              <a href="#" className="hover:text-coral transition-colors">特定商取引法に基づく表記</a>
+              <a href="#" className="hover:text-coral transition-colors">お問い合わせ</a>
+              <a href="/blog" className="hover:text-coral transition-colors">ブログ</a>
+            </nav>
+            <p className="text-xs text-warm-gray">© 2025 movicre. All rights reserved.</p>
           </div>
         </div>
       </footer>

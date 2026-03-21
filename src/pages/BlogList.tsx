@@ -27,8 +27,8 @@ export default function BlogList() {
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-ivory/90 backdrop-blur-md border-b border-beige">
         <div className="container flex items-center justify-between h-16 md:h-18">
-          <Link to="/" className="text-lg md:text-xl text-warm-brown font-medium">
-            動画編集スクール
+          <Link to="/">
+            <img src="/images/movicre-logo.png" alt="movicre" className="h-12 md:h-14" />
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <Link to="/" className="text-warm-gray hover:text-coral transition-colors">トップ</Link>
