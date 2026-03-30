@@ -85,10 +85,9 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
             <motion.div {...fadeInUp} className="order-2 lg:order-1">
               <p className="font-accent text-2xl md:text-3xl text-coral mb-4">For Working Women</p>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl text-warm-brown font-medium leading-tight mb-6">
-                仕事終わりの2時間で、<br />
-                <span className="text-coral">"副業できる私"</span>になる<br />
-                動画編集スクール
+              <h1 className="text-2xl md:text-4xl lg:text-5xl text-warm-brown font-medium mb-6">
+                <span className="block mb-1 md:mb-2 lg:mb-4">仕事終わりの2時間で、</span>
+                <span className="block"><span className="text-coral">"副業できる私"</span>になる</span>
               </h1>
               <p className="text-warm-gray text-base md:text-lg leading-relaxed mb-4">
                 3ヶ月で、縦型動画2本＋YouTube動画2本の作品と<br className="hidden md:block" />
@@ -190,10 +189,10 @@ export default function Home() {
         <div className="container">
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto text-center">
             <p className="font-accent text-2xl md:text-3xl text-coral mb-6">Our Concept</p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium leading-relaxed mb-10">
-              会社に縛られず、<br />
-              <span className="text-coral">"自分のペースで稼ぐ力"</span>を持つ<br />
-              女性を増やすための、動画編集スクールです。
+            <h2 className="text-xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-10">
+              <span className="block mb-1 md:mb-2 lg:mb-4">会社に縛られず、</span>
+              <span className="block mb-1 md:mb-2 lg:mb-4"><span className="text-coral">"自分のペースで稼ぐ力"</span>を持つ</span>
+              <span className="block">女性を増やすための、<br className="md:hidden" />動画編集スクールです。</span>
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6 text-left">
@@ -712,11 +711,11 @@ export default function Home() {
       {/* CTA Section */}
       <section className="py-16 md:py-24 bg-gradient-to-b from-dusty-pink-light/50 to-ivory">
         <div className="container">
-          <motion.div {...fadeInUp} className="text-center max-w-2xl mx-auto">
+          <motion.div {...fadeInUp} className="text-center max-w-3xl mx-auto">
             <p className="font-accent text-2xl md:text-3xl text-coral mb-4">Start Your Journey</p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-6">
-              まずは無料個別相談で、<br />
-              あなたの"モヤモヤ"を聞かせてください。
+            <h2 className="text-xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-6">
+              <span className="block mb-1 md:mb-2 lg:mb-4">まずは無料個別相談で、</span>
+              <span className="block">あなたの<br className="md:hidden" />"モヤモヤ"を聞かせてください。</span>
             </h2>
             <p className="text-warm-gray mb-8 leading-relaxed">
               「自分にできるか不安…」「何から始めればいい？」<br />
