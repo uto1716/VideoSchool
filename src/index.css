@@ -23,7 +23,7 @@
   --color-warm-gray: #8a7d70;
 
   /* Typography */
-  --font-body: "Zen Maru Gothic", "Rounded Mplus 1c", "Hiragino Maru Gothic Pro", sans-serif;
+  --font-body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
   --font-accent: "Caveat", "Klee One", cursive;
 
   --radius: 1.25rem;
