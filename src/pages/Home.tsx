@@ -516,13 +516,14 @@ export default function Home() {
               <div className="bg-coral text-white text-center py-3">
                 <p className="font-medium">全8週間 集中コース</p>
               </div>
-              <CardContent className="p-6 md:p-8">
-                <div className="text-center mb-6">
+              <CardContent className="!p-0">
+                <div className="text-center px-6 py-8 md:px-10 md:py-10 border-b border-warm-gray/20">
                   <p className="text-5xl md:text-6xl text-warm-brown font-medium">
                     98,000<span className="text-xl">円</span>
                   </p>
-                  <p className="text-sm text-warm-gray mt-1">（税込）</p>
+                  <p className="text-sm text-warm-gray mt-3">（税込）</p>
                 </div>
+                <div className="px-6 py-8 md:px-10 md:py-10">
 
                 <div className="space-y-3 mb-8">
                   <p className="text-sm text-warm-gray font-medium">含まれるもの：</p>
@@ -553,6 +554,7 @@ export default function Home() {
                 >
                   無料個別相談に申し込む
                 </Button>
+                </div>
               </CardContent>
             </Card>
 
