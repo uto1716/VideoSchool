@@ -205,8 +205,10 @@ export default function Home() {
             fetchPriority="high"
           />
           {/* 左側にアイボリーのベールをかけてコピーの可読性を確保 */}
-          <div className="absolute inset-0 bg-gradient-to-r from-ivory/85 via-ivory/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-ivory/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/75 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ivory/70 via-transparent to-transparent" />
+          {/* モバイルは文字が全幅に載るため、全体にもう一枚薄いベール */}
+          <div className="absolute inset-0 bg-ivory/30 md:hidden" />
         </div>
 
         <div className="container relative pt-28 pb-24 md:pt-40 md:pb-32 min-h-[600px] md:min-h-[680px] flex items-center">
@@ -219,21 +221,18 @@ export default function Home() {
             <motion.p variants={staggerItem} className="font-accent text-2xl md:text-3xl text-coral mb-5 [text-shadow:0_0_14px_rgba(249,247,244,0.95),0_1px_3px_rgba(249,247,244,0.9)]">
               For Working Women
             </motion.p>
-            <motion.h1 variants={staggerItem} className="text-2xl md:text-4xl lg:text-[2.75rem] text-warm-brown font-medium mb-6 tracking-[0.02em] leading-snug">
-              <span className="inline-block bg-white/95 rounded-lg px-4 py-2 md:px-5 md:py-2.5 shadow-soft mb-2 md:mb-3">仕事終わりの2時間で、</span>
-              <br />
-              <span className="inline-block bg-white/95 rounded-lg px-4 py-2 md:px-5 md:py-2.5 shadow-soft"><span className="text-coral">"副業できる私"</span>になる</span>
+            <motion.h1 variants={staggerItem} className="text-[1.75rem] md:text-4xl lg:text-5xl text-warm-brown font-medium mb-6 tracking-[0.02em] leading-snug">
+              <span className="block mb-1 md:mb-2">仕事終わりの2時間で、</span>
+              <span className="block"><span className="text-coral">"副業できる私"</span>になる</span>
             </motion.h1>
-            <motion.p variants={staggerItem} className="text-warm-brown text-base md:text-lg leading-relaxed mb-5">
-              <span className="inline-block bg-white/85 backdrop-blur-sm rounded-lg px-4 py-2.5">
-                <span className="inline-block">3ヶ月で、縦型動画2本＋</span><span className="inline-block">YouTube動画2本の作品と</span><br className="hidden md:block" />
-                <span className="inline-block">"副業デビューの一歩"を一緒に作ります。</span>
-              </span>
+            <motion.p variants={staggerItem} className="text-warm-brown/90 text-base md:text-lg leading-relaxed mb-6">
+              <span className="inline-block">3ヶ月で、縦型動画2本＋</span><span className="inline-block">YouTube動画2本の作品と</span><br className="hidden md:block" />
+              <span className="inline-block">"副業デビューの一歩"を一緒に作ります。</span>
             </motion.p>
             <motion.div variants={staggerItem} className="flex flex-wrap gap-3 mb-9 text-sm text-warm-brown">
-              <span className="bg-white/90 shadow-soft px-3.5 py-1.5 rounded-full">25〜39歳</span>
-              <span className="bg-white/90 shadow-soft px-3.5 py-1.5 rounded-full">会社員・パート</span>
-              <span className="bg-white/90 shadow-soft px-3.5 py-1.5 rounded-full">完全未経験OK</span>
+              <span className="bg-white/70 backdrop-blur-sm border border-warm-brown/10 px-3.5 py-1.5 rounded-full">25〜39歳</span>
+              <span className="bg-white/70 backdrop-blur-sm border border-warm-brown/10 px-3.5 py-1.5 rounded-full">会社員・パート</span>
+              <span className="bg-white/70 backdrop-blur-sm border border-warm-brown/10 px-3.5 py-1.5 rounded-full">完全未経験OK</span>
             </motion.div>
             <motion.div variants={staggerItem} className="relative inline-block">
               <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-coral border border-coral/30 text-xs font-medium px-3 py-0.5 rounded-full shadow-soft whitespace-nowrap z-10">
