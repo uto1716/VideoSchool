@@ -185,6 +185,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* 装飾要素のはみ出しによる横スクロールを防止 */
+html, body {
+  overflow-x: clip;
+}
+
 /* Animation keyframes */
 @keyframes fadeInUp {
   from {

@@ -61,8 +61,8 @@ const staggerItem = {
 function Sparkles({ children }: { children: ReactNode }) {
   return (
     <span className="relative inline-block">
-      <span aria-hidden className="animate-twinkle absolute -top-4 -left-6 md:-top-5 md:-left-8 text-coral text-lg md:text-xl select-none">✦</span>
-      <span aria-hidden className="animate-twinkle absolute -bottom-2 -right-6 md:-right-8 text-coral/60 text-sm md:text-base select-none" style={{ animationDelay: "1.2s" }}>✦</span>
+      <span aria-hidden className="animate-twinkle hidden md:inline absolute -top-5 -left-8 text-coral text-xl select-none">✦</span>
+      <span aria-hidden className="animate-twinkle hidden md:inline absolute -bottom-2 -right-8 text-coral/60 text-base select-none" style={{ animationDelay: "1.2s" }}>✦</span>
       {children}
     </span>
   );
