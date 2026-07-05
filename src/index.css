@@ -20,7 +20,8 @@
   --color-coral: #e88673;
   --color-coral-light: #f0a998;
   --color-warm-brown: #5c4a3a;
-  --color-warm-gray: #8a7d70;
+  /* WCAG AA (4.5:1) を満たすよう #8a7d70 から暗めに調整 */
+  --color-warm-gray: #6f6357;
 
   /* Typography */
   --font-body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
