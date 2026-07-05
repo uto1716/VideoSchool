@@ -212,7 +212,8 @@ export default function Home() {
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-4">
-              こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、抱えていませんか？
+              <span className="inline-block">こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、</span>
+              <span className="inline-block">抱えていませんか？</span>
             </h2>
           </motion.div>
 
@@ -370,7 +371,9 @@ export default function Home() {
           <motion.div {...fadeInUp} className="text-center mb-12">
             <p className="font-accent text-xl text-coral mb-2">Curriculum</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-4">
-              未経験からでも安心！<br className="md:hidden" />ゴールから逆算した8週間プログラム
+              <span className="inline-block">未経験からでも安心！</span><br className="md:hidden" />
+              <span className="inline-block">ゴールから逆算した</span>
+              <span className="inline-block">8週間プログラム</span>
             </h2>
           </motion.div>
 
