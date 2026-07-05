@@ -327,7 +327,7 @@ export default function Home() {
       {/* S3: Concept Section */}
       <section className="py-16 md:py-24 bg-ivory">
         <div className="container">
-          <motion.div {...fadeInUp} className="max-w-3xl mx-auto text-center">
+          <motion.div {...fadeInUp} className="max-w-4xl mx-auto text-center">
             <p className="section-label mb-6">Our Concept</p>
             <h2 className="text-xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-10">
               <span className="block mb-1 md:mb-2 lg:mb-4">会社に縛られず、</span>
@@ -911,7 +911,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative z-10 -mt-8 rounded-t-[2.5rem] md:rounded-t-[4rem] py-16 md:py-24 bg-gradient-to-b from-dusty-pink-light/60 to-ivory">
+      <section className="relative z-10 -mt-8 rounded-t-[2.5rem] md:rounded-t-[4rem] py-16 md:py-24 bg-gradient-to-b from-dusty-pink-light to-ivory">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center max-w-3xl mx-auto">
             <p className="section-label mb-4">Start Your Journey</p>
