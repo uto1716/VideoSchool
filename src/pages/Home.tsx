@@ -646,7 +646,8 @@ export default function Home() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-warm-gray">
-                卒業後は、月額3,000円のオンライン部室で継続参加も可能です。
+                <span className="inline-block">卒業後は、月額3,000円のオンライン部室で</span>
+                <span className="inline-block">継続参加も可能です。</span>
               </p>
             </div>
           </motion.div>
@@ -822,9 +823,12 @@ export default function Home() {
               <span className="block">あなたの<br className="md:hidden" />"モヤモヤ"を聞かせてください。</span>
             </h2>
             <p className="text-warm-gray mb-8 leading-relaxed">
-              「自分にできるか不安…」「何から始めればいい？」<br />
-              そんな疑問や不安を、講師に直接相談できます。<br />
-              無理な勧誘は一切ありませんので、お気軽にどうぞ。
+              <span className="inline-block">「自分にできるか不安…」</span>
+              <span className="inline-block">「何から始めればいい？」</span><br />
+              <span className="inline-block">そんな疑問や不安を、</span>
+              <span className="inline-block">講師に直接相談できます。</span><br />
+              <span className="inline-block">無理な勧誘は一切ありませんので、</span>
+              <span className="inline-block">お気軽にどうぞ。</span>
             </p>
             <Button
               size="lg"
