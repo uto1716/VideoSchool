@@ -201,7 +201,7 @@ export default function Home() {
             aria-hidden
             className="w-full h-full object-cover object-[65%_center] hero-kenburns"
             width={2400}
-            height={1340}
+            height={1600}
             fetchPriority="high"
           />
           {/* 左側にアイボリーのベールをかけてコピーの可読性を確保 */}
@@ -570,8 +570,8 @@ export default function Home() {
                 src="/images/online-class.webp"
                 alt="オンラインで一緒に学ぶ仲間たち"
                 className="w-full h-auto"
-                width={1600}
-                height={893}
+                width={1536}
+                height={1024}
                 loading="lazy"
               />
             </div>
@@ -634,7 +634,7 @@ export default function Home() {
                     alt="Aさん"
                     className="w-full h-full object-cover"
                     width={320}
-                    height={179}
+                    height={320}
                     loading="lazy"
                   />
                 </div>
@@ -866,7 +866,7 @@ export default function Home() {
                     alt="講師"
                     className="w-full h-full object-cover"
                     width={600}
-                    height={1075}
+                    height={900}
                     loading="lazy"
                   />
                 </div>
