@@ -91,10 +91,12 @@ const AccordionContent = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={`overflow-hidden transition-all ${isOpen ? 'animate-accordion-down' : 'animate-accordion-up hidden'}`}
+      className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
       {...props}
     >
-      <div className={className}>{children}</div>
+      <div className="overflow-hidden">
+        <div className={className}>{children}</div>
+      </div>
     </div>
   )
 })

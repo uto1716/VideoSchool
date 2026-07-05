@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
 import {
   Video,
   Users,
@@ -25,6 +25,7 @@ import {
   ChevronRight,
   Check,
   X,
+  Menu,
 } from "lucide-react";
 
 /*
@@ -44,6 +45,8 @@ const fadeInUp = {
 export default function Home() {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
   const [showLineModal, setShowLineModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showStickyCta, setShowStickyCta] = useState(false);
 
   const toggleCheck = (index: number) => {
     setCheckedItems(prev =>
@@ -52,6 +55,28 @@ export default function Home() {
         : [...prev, index]
     );
   };
+
+  // ヒーローを過ぎたらモバイル用の追従CTAを表示
+  useEffect(() => {
+    const onScroll = () => setShowStickyCta(window.scrollY > 600);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // モーダル表示中は ESC で閉じる＋背面スクロールを固定
+  useEffect(() => {
+    if (!showLineModal) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowLineModal(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [showLineModal]);
 
   return (
     <div className="min-h-screen bg-ivory">
@@ -68,13 +93,53 @@ export default function Home() {
             <a href="#faq" className="text-warm-gray hover:text-coral transition-colors">よくある質問</a>
             <a href="/blog" className="text-warm-gray hover:text-coral transition-colors">ブログ</a>
           </nav>
-          <Button
-            onClick={() => setShowLineModal(true)}
-            className="bg-coral hover:bg-coral/90 text-white rounded-full px-5 py-2 text-sm font-medium shadow-soft"
-          >
-            無料相談を予約
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={() => setShowLineModal(true)}
+              className="bg-coral hover:bg-coral/90 text-white rounded-full px-5 py-2 text-sm font-medium shadow-soft"
+            >
+              無料相談を予約
+            </Button>
+            <button
+              onClick={() => setShowMobileMenu(prev => !prev)}
+              className="md:hidden p-2 text-warm-brown hover:text-coral transition-colors"
+              aria-label={showMobileMenu ? "メニューを閉じる" : "メニューを開く"}
+              aria-expanded={showMobileMenu}
+            >
+              {showMobileMenu ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
         </div>
+        <AnimatePresence>
+          {showMobileMenu && (
+            <motion.nav
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="md:hidden overflow-hidden bg-ivory border-t border-beige"
+            >
+              <div className="container py-4 flex flex-col gap-1 text-sm">
+                {[
+                  { href: "#curriculum", label: "カリキュラム" },
+                  { href: "#support", label: "サポート" },
+                  { href: "#price", label: "料金" },
+                  { href: "#faq", label: "よくある質問" },
+                  { href: "/blog", label: "ブログ" },
+                ].map(item => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setShowMobileMenu(false)}
+                    className="py-2.5 px-2 text-warm-brown hover:text-coral transition-colors rounded-lg"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            </motion.nav>
+          )}
+        </AnimatePresence>
       </header>
 
       {/* S1: Hero Section */}
@@ -116,9 +181,12 @@ export default function Home() {
               <div className="relative">
                 <div className="rounded-3xl overflow-hidden shadow-soft-lg">
                   <img
-                    src="/images/hero-new.jpg"
+                    src="/images/hero-new.webp"
                     alt="自宅で動画編集を学ぶ女性"
                     className="w-full h-auto object-cover"
+                    width={1400}
+                    height={781}
+                    fetchPriority="high"
                   />
                 </div>
                 {/* Floating badge */}
@@ -144,7 +212,8 @@ export default function Home() {
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-4">
-              こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、抱えていませんか？
+              <span className="inline-block">こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、</span>
+              <span className="inline-block">抱えていませんか？</span>
             </h2>
           </motion.div>
 
@@ -163,7 +232,7 @@ export default function Home() {
                 <input
                   type="checkbox"
                   checked={checkedItems.includes(index)}
-                  onChange={() => {}}
+                  readOnly
                   className="concern-checkbox mt-0.5 shrink-0"
                 />
                 <span className="text-warm-brown leading-relaxed">{concern}</span>
@@ -231,12 +300,21 @@ export default function Home() {
 
           <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
             {/* Before/After Image */}
-            <div className="rounded-3xl overflow-hidden shadow-soft-lg mb-10">
+            <div className="relative rounded-3xl overflow-hidden shadow-soft-lg mb-10">
               <img
-                src="/images/before-after.jpg"
+                src="/images/before-after.webp"
                 alt="ビフォーアフター：会社員からフリーランスへ"
                 className="w-full h-auto"
+                width={1800}
+                height={849}
+                loading="lazy"
               />
+              <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-warm-brown/80 text-white text-xs md:text-sm font-medium px-3 py-1.5 md:px-4 md:py-2 rounded-full backdrop-blur-sm">
+                会社員の毎日
+              </div>
+              <div className="absolute top-3 left-[calc(50%+0.75rem)] md:top-4 md:left-[calc(50%+1rem)] bg-coral/90 text-white text-xs md:text-sm font-medium px-3 py-1.5 md:px-4 md:py-2 rounded-full backdrop-blur-sm">
+                フリーランスの働き方
+              </div>
             </div>
 
             {/* Before */}
@@ -293,14 +371,16 @@ export default function Home() {
           <motion.div {...fadeInUp} className="text-center mb-12">
             <p className="font-accent text-xl text-coral mb-2">Curriculum</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-4">
-              未経験からでも安心！<br className="md:hidden" />ゴールから逆算した8週間プログラム
+              <span className="inline-block">未経験からでも安心！</span><br className="md:hidden" />
+              <span className="inline-block">ゴールから逆算した</span>
+              <span className="inline-block">8週間プログラム</span>
             </h2>
           </motion.div>
 
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <div className="relative">
-              {/* Timeline line */}
-              <div className="absolute left-6 md:left-8 top-0 bottom-0 w-0.5 bg-dusty-pink" />
+              {/* Timeline line — ドット中心（モバイル24px / md36px）に合わせる */}
+              <div className="absolute left-[23px] md:left-[35px] top-0 bottom-0 w-0.5 bg-dusty-pink" />
 
               {[
                 {
@@ -395,9 +475,12 @@ export default function Home() {
           <motion.div {...fadeInUp} className="mt-12 max-w-3xl mx-auto">
             <div className="rounded-3xl overflow-hidden shadow-soft-lg">
               <img
-                src="/images/online-class.jpg"
+                src="/images/online-class.webp"
                 alt="オンラインで一緒に学ぶ仲間たち"
                 className="w-full h-auto"
+                width={1600}
+                height={893}
+                loading="lazy"
               />
             </div>
           </motion.div>
@@ -455,9 +538,12 @@ export default function Home() {
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full overflow-hidden">
                   <img
-                    src="/images/student-story.jpg"
+                    src="/images/student-story.webp"
                     alt="Aさん"
                     className="w-full h-full object-cover"
+                    width={320}
+                    height={179}
+                    loading="lazy"
                   />
                 </div>
                 <div>
@@ -512,11 +598,11 @@ export default function Home() {
           </motion.div>
 
           <motion.div {...fadeInUp} className="max-w-lg mx-auto">
-            <Card className="border-2 border-coral shadow-soft-lg overflow-hidden">
+            <Card className="border-2 border-coral bg-coral shadow-soft-lg overflow-hidden">
               <div className="bg-coral text-white text-center py-3">
                 <p className="font-medium">全8週間 集中コース</p>
               </div>
-              <CardContent className="!p-0">
+              <CardContent className="!p-0 bg-white">
                 <div className="text-center px-6 py-8 md:px-10 md:py-10 border-b border-warm-gray/20">
                   <p className="text-5xl md:text-6xl text-warm-brown font-medium">
                     98,000<span className="text-xl">円</span>
@@ -560,7 +646,8 @@ export default function Home() {
 
             <div className="mt-6 text-center">
               <p className="text-sm text-warm-gray">
-                卒業後は、月額3,000円のオンライン部室で継続参加も可能です。
+                <span className="inline-block">卒業後は、月額3,000円のオンライン部室で</span>
+                <span className="inline-block">継続参加も可能です。</span>
               </p>
             </div>
           </motion.div>
@@ -585,16 +672,14 @@ export default function Home() {
               { step: 4, title: "8週間の受講", description: "週1回の講義と課題、質問サポートを活用し、あなたのペースで作品とポートフォリオを完成させます。" },
               { step: 5, title: "卒業", description: "卒業おめでとうございます！希望者はコミュニティプランで、引き続き一緒に頑張りましょう。" },
             ].map((item, index) => (
-              <div key={index} className="flex gap-4 md:gap-6 mb-6 last:mb-0">
-                <div className="shrink-0">
+              <div key={index} className="flex gap-4 md:gap-6">
+                <div className="shrink-0 flex flex-col items-center">
                   <div className="w-10 h-10 md:w-12 md:h-12 bg-coral text-white rounded-full flex items-center justify-center font-medium text-lg">
                     {item.step}
                   </div>
-                  {index < 4 && (
-                    <div className="w-0.5 h-full bg-dusty-pink mx-auto mt-2" style={{ minHeight: '40px' }} />
-                  )}
+                  {index < 4 && <div className="w-0.5 flex-1 bg-dusty-pink" />}
                 </div>
-                <div className="bg-beige/30 rounded-2xl p-4 md:p-5 flex-1">
+                <div className={`bg-beige/30 rounded-2xl p-4 md:p-5 flex-1 ${index < 4 ? 'mb-6' : ''}`}>
                   <h3 className="text-warm-brown font-medium mb-1">{item.title}</h3>
                   <p className="text-warm-gray text-sm leading-relaxed">{item.description}</p>
                 </div>
@@ -633,6 +718,18 @@ export default function Home() {
                   q: "ついていけなかった場合、どうなりますか？",
                   a: "まずは講師にご相談ください。課題の提出など、決められた条件を満たしている方には、学習計画の見直しなど個別のサポートを検討しますのでご安心ください。",
                 },
+                {
+                  q: "パソコンは必要ですか？高いスペックが必要？",
+                  a: "1〜2週目の縦型動画はスマホアプリ（CapCut）で完結します。3週目以降のYouTube動画編集では一般的なノートパソコンをご用意ください。高価な専用マシンは不要です。お手持ちのPCで問題ないかは、無料相談時にご確認いただけます。",
+                },
+                {
+                  q: "編集ソフトの購入費用は別途かかりますか？",
+                  a: "カリキュラムは無料で使えるツールを中心に設計しているため、受講料以外に高額なソフト購入費はかかりません。詳しい使用ツールは無料相談でご案内します。",
+                },
+                {
+                  q: "顔出しや年齢制限はありますか？",
+                  a: "顔出しは一切不要です。動画編集は裏方の仕事なので、ご自身が画面に映ることはありません。また、25〜39歳の方を主な対象としていますが、対象年齢以外の方もまずはご相談ください。",
+                },
               ].map((faq, index) => (
                 <AccordionItem
                   key={index}
@@ -667,9 +764,12 @@ export default function Home() {
               <div className="mx-auto md:mx-0">
                 <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg">
                   <img
-                    src="/images/instructor-new.jpg"
+                    src="/images/instructor-new.webp"
                     alt="講師"
                     className="w-full h-full object-cover"
+                    width={600}
+                    height={1075}
+                    loading="lazy"
                   />
                 </div>
               </div>
@@ -698,7 +798,10 @@ export default function Home() {
               <div className="absolute -top-3 left-8 bg-coral text-white text-sm px-4 py-1 rounded-full">
                 講師からのメッセージ
               </div>
-              <p className="text-warm-brown leading-loose mt-2 font-accent text-lg md:text-xl">
+              <p className="font-accent text-xl md:text-2xl text-coral mt-2 mb-4">
+                自分のペースで働けるって、こんなに楽しい。
+              </p>
+              <p className="text-warm-brown leading-loose">
                 「かつての私は、会社に縛られて心身ともに疲弊していました。そんな時に出会ったのが動画編集です。
                 <br /><br />
                 自分のスキルで、自分のペースで仕事を選べるようになったことで、心から人生が楽しいと思えるようになりました。
@@ -720,9 +823,12 @@ export default function Home() {
               <span className="block">あなたの<br className="md:hidden" />"モヤモヤ"を聞かせてください。</span>
             </h2>
             <p className="text-warm-gray mb-8 leading-relaxed">
-              「自分にできるか不安…」「何から始めればいい？」<br />
-              そんな疑問や不安を、講師に直接相談できます。<br />
-              無理な勧誘は一切ありませんので、お気軽にどうぞ。
+              <span className="inline-block">「自分にできるか不安…」</span>
+              <span className="inline-block">「何から始めればいい？」</span><br />
+              <span className="inline-block">そんな疑問や不安を、</span>
+              <span className="inline-block">講師に直接相談できます。</span><br />
+              <span className="inline-block">無理な勧誘は一切ありませんので、</span>
+              <span className="inline-block">お気軽にどうぞ。</span>
             </p>
             <Button
               size="lg"
@@ -750,8 +856,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 bg-beige/50 border-t border-beige">
+      {/* Footer — pb-24 はモバイル追従CTA分の余白 */}
+      <footer className="py-8 pb-24 md:pb-8 bg-beige/50 border-t border-beige">
         <div className="container">
           <div className="flex flex-col items-center gap-6">
             <img src="/images/movicre-logo.png" alt="movicre" className="h-12" />
@@ -762,14 +868,39 @@ export default function Home() {
               <a href="#" className="hover:text-coral transition-colors">お問い合わせ</a>
               <a href="/blog" className="hover:text-coral transition-colors">ブログ</a>
             </nav>
-            <p className="text-xs text-warm-gray">© 2025 movicre. All rights reserved.</p>
+            <p className="text-xs text-warm-gray">© 2026 movicre. All rights reserved.</p>
           </div>
         </div>
       </footer>
 
+      {/* Mobile sticky CTA */}
+      <AnimatePresence>
+        {showStickyCta && !showLineModal && (
+          <motion.div
+            initial={{ y: 80, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 80, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/95 backdrop-blur-md border-t border-beige px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]"
+          >
+            <Button
+              onClick={() => setShowLineModal(true)}
+              className="w-full bg-coral hover:bg-coral/90 text-white rounded-full py-3.5 text-base font-medium shadow-soft-lg"
+            >
+              無料個別相談に申し込む
+            </Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* LINE QR Code Modal */}
+      <AnimatePresence>
       {showLineModal && (
-        <div
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
           onClick={() => setShowLineModal(false)}
         >
@@ -778,11 +909,15 @@ export default function Home() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.2 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="公式LINEで無料相談"
             className="bg-white rounded-3xl p-8 mx-4 max-w-sm w-full shadow-soft-lg text-center relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setShowLineModal(false)}
+              aria-label="閉じる"
               className="absolute top-4 right-4 text-warm-gray hover:text-warm-brown transition-colors"
             >
               <X className="h-6 w-6" />
@@ -809,8 +944,9 @@ export default function Home() {
               スマートフォンのカメラまたは<br />LINEアプリで読み取ってください
             </p>
           </motion.div>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }

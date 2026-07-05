@@ -21,7 +21,7 @@ export default {
           light: '#f0a998',
         },
         'warm-brown': '#5c4a3a',
-        'warm-gray': '#8a7d70',
+        'warm-gray': '#6f6357',
       },
     },
   },
