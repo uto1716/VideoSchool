@@ -211,6 +211,28 @@ html, body {
   }
 }
 
+/* ヒーロー背景のゆっくりしたズーム（Ken Burns） */
+@keyframes kenburns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
+  }
+}
+
+.hero-kenburns {
+  animation: kenburns 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns,
+  .animate-float,
+  .animate-twinkle {
+    animation: none;
+  }
+}
+
 @keyframes twinkle {
   0%, 100% {
     opacity: 0.25;

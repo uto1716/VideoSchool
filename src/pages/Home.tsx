@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState, type ReactNode } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Video,
   Users,
@@ -56,6 +56,29 @@ const staggerItem = {
     transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
   },
 };
+
+// 価格などの数字をスクロールインでカウントアップ
+function CountUp({ to, duration = 1200 }: { to: number; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setValue(Math.round(to * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, to, duration]);
+
+  return <span ref={ref}>{value.toLocaleString()}</span>;
+}
 
 // セクション見出し横のきらめき装飾（SHElikes風）
 function Sparkles({ children }: { children: ReactNode }) {
@@ -168,73 +191,82 @@ export default function Home() {
         </AnimatePresence>
       </header>
 
-      {/* S1: Hero Section */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-dusty-pink-light/30 to-ivory -z-10" />
+      {/* S1: Hero Section — 写真全面＋白帯見出し */}
+      <section className="relative overflow-hidden">
+        {/* Background photo with slow Ken Burns zoom */}
+        <div className="absolute inset-0">
+          <img
+            src="/images/hero-new.webp"
+            alt=""
+            aria-hidden
+            className="w-full h-full object-cover object-[65%_center] hero-kenburns"
+            width={2400}
+            height={1340}
+            fetchPriority="high"
+          />
+          {/* 左側にアイボリーのベールをかけてコピーの可読性を確保 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-ivory/85 via-ivory/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ivory/60 via-transparent to-transparent" />
+        </div>
 
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <motion.div {...fadeInUp} className="order-2 lg:order-1">
-              <p className="font-accent text-2xl md:text-3xl text-coral mb-4">For Working Women</p>
-              <h1 className="text-2xl md:text-4xl lg:text-5xl text-warm-brown font-medium mb-6 tracking-[0.02em]">
-                <span className="block mb-1 md:mb-2 lg:mb-4">仕事終わりの2時間で、</span>
-                <span className="block"><span className="text-coral">"副業できる私"</span>になる</span>
-              </h1>
-              <p className="text-warm-gray text-base md:text-lg leading-relaxed mb-4">
-                3ヶ月で、縦型動画2本＋YouTube動画2本の作品と<br className="hidden md:block" />
-                "副業デビューの一歩"を一緒に作ります。
-              </p>
-              <div className="flex flex-wrap gap-3 mb-8 text-sm text-warm-brown">
-                <span className="bg-beige px-3 py-1.5 rounded-full">25〜39歳</span>
-                <span className="bg-beige px-3 py-1.5 rounded-full">会社員・パート</span>
-                <span className="bg-beige px-3 py-1.5 rounded-full">完全未経験OK</span>
-              </div>
-              <div className="relative inline-block">
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-coral border border-coral/30 text-xs font-medium px-3 py-0.5 rounded-full shadow-soft whitespace-nowrap z-10">
-                  相談無料・オンライン
-                </span>
-                <Button
-                  size="lg"
-                  onClick={() => setShowLineModal(true)}
-                  className="bg-coral hover:bg-coral/90 text-white rounded-full px-8 py-6 text-lg font-medium shadow-soft-lg group"
-                >
-                  無料個別相談の空き枠を見る
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </div>
+        <div className="container relative pt-28 pb-24 md:pt-40 md:pb-32 min-h-[600px] md:min-h-[680px] flex items-center">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.16, delayChildren: 0.2 } } }}
+            className="max-w-xl"
+          >
+            <motion.p variants={staggerItem} className="font-accent text-2xl md:text-3xl text-coral mb-5 [text-shadow:0_0_14px_rgba(249,247,244,0.95),0_1px_3px_rgba(249,247,244,0.9)]">
+              For Working Women
+            </motion.p>
+            <motion.h1 variants={staggerItem} className="text-2xl md:text-4xl lg:text-[2.75rem] text-warm-brown font-medium mb-6 tracking-[0.02em] leading-snug">
+              <span className="inline-block bg-white/95 rounded-lg px-4 py-2 md:px-5 md:py-2.5 shadow-soft mb-2 md:mb-3">仕事終わりの2時間で、</span>
+              <br />
+              <span className="inline-block bg-white/95 rounded-lg px-4 py-2 md:px-5 md:py-2.5 shadow-soft"><span className="text-coral">"副業できる私"</span>になる</span>
+            </motion.h1>
+            <motion.p variants={staggerItem} className="text-warm-brown text-base md:text-lg leading-relaxed mb-5">
+              <span className="inline-block bg-white/85 backdrop-blur-sm rounded-lg px-4 py-2.5">
+                <span className="inline-block">3ヶ月で、縦型動画2本＋</span><span className="inline-block">YouTube動画2本の作品と</span><br className="hidden md:block" />
+                <span className="inline-block">"副業デビューの一歩"を一緒に作ります。</span>
+              </span>
+            </motion.p>
+            <motion.div variants={staggerItem} className="flex flex-wrap gap-3 mb-9 text-sm text-warm-brown">
+              <span className="bg-white/90 shadow-soft px-3.5 py-1.5 rounded-full">25〜39歳</span>
+              <span className="bg-white/90 shadow-soft px-3.5 py-1.5 rounded-full">会社員・パート</span>
+              <span className="bg-white/90 shadow-soft px-3.5 py-1.5 rounded-full">完全未経験OK</span>
             </motion.div>
+            <motion.div variants={staggerItem} className="relative inline-block">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-coral border border-coral/30 text-xs font-medium px-3 py-0.5 rounded-full shadow-soft whitespace-nowrap z-10">
+                相談無料・オンライン
+              </span>
+              <Button
+                size="lg"
+                onClick={() => setShowLineModal(true)}
+                className="bg-coral hover:bg-coral/90 text-white rounded-full px-8 py-6 text-lg font-medium shadow-soft-lg group"
+              >
+                無料個別相談の空き枠を見る
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </motion.div>
+          </motion.div>
 
-            <motion.div
-              {...fadeInUp}
-              transition={{ delay: 0.15, duration: 0.5 }}
-              className="order-1 lg:order-2"
-            >
-              <div className="relative">
-                <div className="rounded-3xl overflow-hidden shadow-soft-lg">
-                  <img
-                    src="/images/hero-new.webp"
-                    alt="自宅で動画編集を学ぶ女性"
-                    className="w-full h-auto object-cover"
-                    width={1400}
-                    height={781}
-                    fetchPriority="high"
-                  />
-                </div>
-                {/* Floating badge */}
-                <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-soft-lg hidden md:block animate-float">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-dusty-pink-light rounded-full flex items-center justify-center">
-                      <Clock className="h-5 w-5 text-coral" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-warm-gray">1日の学習時間</p>
-                      <p className="text-lg text-warm-brown font-medium">約2時間〜</p>
-                    </div>
-                  </div>
-                </div>
+          {/* Floating badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            className="absolute bottom-16 right-8 lg:right-16 bg-white/95 rounded-2xl p-4 shadow-soft-lg hidden md:block animate-float"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-dusty-pink-light rounded-full flex items-center justify-center">
+                <Clock className="h-5 w-5 text-coral" />
               </div>
-            </motion.div>
-          </div>
+              <div>
+                <p className="text-sm text-warm-gray">1日の学習時間</p>
+                <p className="text-lg text-warm-brown font-medium">約2時間〜</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -518,9 +550,9 @@ export default function Home() {
               },
             ].map((support, index) => (
               <motion.div variants={staggerItem} key={index}>
-                <Card className="border-0 shadow-soft card-lift h-full">
+                <Card className="group border-0 shadow-soft card-lift h-full">
                   <CardContent className="p-6">
-                    <div className="w-12 h-12 bg-dusty-pink-light rounded-2xl flex items-center justify-center mb-4">
+                    <div className="w-12 h-12 bg-dusty-pink-light rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
                       <support.icon className="h-6 w-6 text-coral" />
                     </div>
                     <h3 className="text-lg text-warm-brown font-medium mb-2">{support.title}</h3>
@@ -665,7 +697,7 @@ export default function Home() {
               <CardContent className="!p-0 bg-white">
                 <div className="text-center px-6 py-8 md:px-10 md:py-10 border-b border-warm-gray/20">
                   <p className="text-5xl md:text-6xl text-warm-brown font-medium font-en">
-                    98,000<span className="text-xl font-body">円</span>
+                    <CountUp to={98000} /><span className="text-xl font-body">円</span>
                   </p>
                   <p className="text-sm text-warm-gray mt-3">（税込）</p>
                 </div>
@@ -815,12 +847,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* S12: Instructor Section */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* S12: Instructor Section — ダーク反転でページに緩急をつける */}
+      <section className="relative z-10 -mt-8 rounded-t-[2.5rem] md:rounded-t-[4rem] py-16 md:py-24 pb-24 md:pb-32 bg-warm-brown">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="section-label mb-3">Instructor</p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
+            <p className="section-label mb-3 !text-coral-light">Instructor</p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl text-ivory font-medium">
               講師紹介
             </h2>
           </motion.div>
@@ -828,7 +860,7 @@ export default function Home() {
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-[200px_1fr] gap-8 items-start">
               <div className="mx-auto md:mx-0">
-                <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg">
+                <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg ring-4 ring-white/10">
                   <img
                     src="/images/instructor-new.webp"
                     alt="講師"
@@ -841,8 +873,8 @@ export default function Home() {
               </div>
 
               <div>
-                <h3 className="text-xl text-warm-brown font-medium mb-1">◯◯ ◯◯</h3>
-                <p className="text-coral text-sm mb-4">女性向け動画編集・副業サポーター</p>
+                <h3 className="text-xl text-ivory font-medium mb-1">◯◯ ◯◯</h3>
+                <p className="text-coral-light text-sm mb-4">女性向け動画編集・副業サポーター</p>
 
                 <div className="space-y-2 mb-6">
                   {[
@@ -850,8 +882,8 @@ export default function Home() {
                     "未経験から動画編集を学び、1年で独立",
                     "法人・個人問わず100本以上の動画制作実績",
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm text-warm-gray">
-                      <ChevronRight className="h-4 w-4 text-coral" />
+                    <div key={index} className="flex items-center gap-2 text-sm text-beige">
+                      <ChevronRight className="h-4 w-4 text-coral-light" />
                       <span>{item}</span>
                     </div>
                   ))}
@@ -860,14 +892,14 @@ export default function Home() {
             </div>
 
             {/* Message */}
-            <div className="mt-8 bg-dusty-pink-light/40 rounded-3xl p-6 md:p-8 relative">
+            <div className="mt-8 bg-white/[0.07] border border-white/10 rounded-3xl p-6 md:p-8 relative">
               <div className="absolute -top-3 left-8 bg-coral text-white text-sm px-4 py-1 rounded-full">
                 講師からのメッセージ
               </div>
-              <p className="font-accent text-xl md:text-2xl text-coral mt-2 mb-4">
+              <p className="font-accent text-xl md:text-2xl text-coral-light mt-2 mb-4">
                 自分のペースで働けるって、こんなに楽しい。
               </p>
-              <p className="text-warm-brown leading-loose">
+              <p className="text-ivory/90 leading-loose">
                 「かつての私は、会社に縛られて心身ともに疲弊していました。そんな時に出会ったのが動画編集です。
                 <br /><br />
                 自分のスキルで、自分のペースで仕事を選べるようになったことで、心から人生が楽しいと思えるようになりました。
