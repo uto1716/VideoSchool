@@ -26,6 +26,8 @@
   /* Typography */
   --font-body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
   --font-accent: "Caveat", "Klee One", cursive;
+  /* futura系ジオメトリックサンセリフ（英語ラベル・数字用） */
+  --font-en: "Jost", "Noto Sans JP", sans-serif;
 
   --radius: 1.25rem;
   --background: var(--color-ivory);
@@ -43,10 +45,14 @@
     color: var(--foreground);
     font-family: var(--font-body);
     font-weight: 400;
+    letter-spacing: 0.01em;
   }
+  /* 和文見出しは字間を広めに取ると今風の柔らかさが出る */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-body);
     font-weight: 500;
+    letter-spacing: 0.06em;
+    line-height: 1.5;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -97,6 +103,30 @@
   
   .font-accent {
     font-family: var(--font-accent);
+  }
+
+  .font-en {
+    font-family: var(--font-en);
+  }
+
+  /* セクションラベル（SHElikes / smaluna 風の小さなトラッキング英字） */
+  .section-label {
+    font-family: var(--font-en);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-indent: 0.35em; /* tracking分のセンターずれ補正 */
+    text-transform: uppercase;
+    color: var(--color-coral);
+  }
+
+  /* カードの浮き上がりホバー */
+  .card-lift {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px -8px rgba(0, 0, 0, 0.1), 0 4px 16px -4px rgba(0, 0, 0, 0.05);
   }
   
   /* Color utilities */
@@ -174,6 +204,21 @@ html {
   50% {
     transform: translateY(-10px);
   }
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1) rotate(15deg);
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle 2.4s ease-in-out infinite;
 }
 
 @keyframes pulse-soft {
