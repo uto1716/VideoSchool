@@ -6,8 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { motion, AnimatePresence } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Video,
   Users,
@@ -41,6 +41,55 @@ const fadeInUp = {
   viewport: { once: true, margin: "-50px" },
   transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
 };
+
+// カードグリッド用のスタッガー（順番に現れる）アニメーション
+const staggerContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  },
+};
+
+// 価格などの数字をスクロールインでカウントアップ
+function CountUp({ to, duration = 1200 }: { to: number; duration?: number }) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-50px" });
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (!inView) return;
+    let raf = 0;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setValue(Math.round(to * eased));
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, to, duration]);
+
+  return <span ref={ref}>{value.toLocaleString()}</span>;
+}
+
+// セクション見出し横のきらめき装飾（SHElikes風）
+function Sparkles({ children }: { children: ReactNode }) {
+  return (
+    <span className="relative inline-block">
+      <span aria-hidden className="animate-twinkle hidden md:inline absolute -top-5 -left-8 text-coral text-xl select-none">✦</span>
+      <span aria-hidden className="animate-twinkle hidden md:inline absolute -bottom-2 -right-8 text-coral/60 text-base select-none" style={{ animationDelay: "1.2s" }}>✦</span>
+      {children}
+    </span>
+  );
+}
 
 export default function Home() {
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
@@ -142,27 +191,53 @@ export default function Home() {
         </AnimatePresence>
       </header>
 
-      {/* S1: Hero Section */}
-      <section className="relative pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-dusty-pink-light/30 to-ivory -z-10" />
+      {/* S1: Hero Section — 写真全面＋白帯見出し */}
+      <section className="relative overflow-hidden">
+        {/* Background photo with slow Ken Burns zoom */}
+        <div className="absolute inset-0">
+          <img
+            src="/images/hero-new.webp"
+            alt=""
+            aria-hidden
+            className="w-full h-full object-cover object-[65%_center] hero-kenburns"
+            width={2400}
+            height={1600}
+            fetchPriority="high"
+          />
+          {/* 左側にアイボリーのベールをかけてコピーの可読性を確保 */}
+          <div className="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/75 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ivory/70 via-transparent to-transparent" />
+          {/* モバイルは文字が全幅に載るため、全体にもう一枚薄いベール */}
+          <div className="absolute inset-0 bg-ivory/30 md:hidden" />
+        </div>
 
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <motion.div {...fadeInUp} className="order-2 lg:order-1">
-              <p className="font-accent text-2xl md:text-3xl text-coral mb-4">For Working Women</p>
-              <h1 className="text-2xl md:text-4xl lg:text-5xl text-warm-brown font-medium mb-6">
-                <span className="block mb-1 md:mb-2 lg:mb-4">仕事終わりの2時間で、</span>
-                <span className="block"><span className="text-coral">"副業できる私"</span>になる</span>
-              </h1>
-              <p className="text-warm-gray text-base md:text-lg leading-relaxed mb-4">
-                3ヶ月で、縦型動画2本＋YouTube動画2本の作品と<br className="hidden md:block" />
-                "副業デビューの一歩"を一緒に作ります。
-              </p>
-              <div className="flex flex-wrap gap-3 mb-8 text-sm text-warm-brown">
-                <span className="bg-beige px-3 py-1.5 rounded-full">25〜39歳</span>
-                <span className="bg-beige px-3 py-1.5 rounded-full">会社員・パート</span>
-                <span className="bg-beige px-3 py-1.5 rounded-full">完全未経験OK</span>
-              </div>
+        <div className="container relative pt-28 pb-24 md:pt-40 md:pb-32 min-h-[600px] md:min-h-[680px] flex items-center">
+          <motion.div
+            initial="hidden"
+            animate="show"
+            variants={{ hidden: {}, show: { transition: { staggerChildren: 0.16, delayChildren: 0.2 } } }}
+            className="max-w-xl"
+          >
+            <motion.p variants={staggerItem} className="font-accent text-2xl md:text-3xl text-coral mb-5 [text-shadow:0_0_14px_rgba(249,247,244,0.95),0_1px_3px_rgba(249,247,244,0.9)]">
+              For Working Women
+            </motion.p>
+            <motion.h1 variants={staggerItem} className="text-[1.75rem] md:text-4xl lg:text-5xl text-warm-brown font-medium mb-6 tracking-[0.02em] leading-snug">
+              <span className="block mb-1 md:mb-2">仕事終わりの2時間で、</span>
+              <span className="block"><span className="text-coral">"副業できる私"</span>になる</span>
+            </motion.h1>
+            <motion.p variants={staggerItem} className="text-warm-brown/90 text-base md:text-lg leading-relaxed mb-6">
+              <span className="inline-block">3ヶ月で、縦型動画2本＋</span><span className="inline-block">YouTube動画2本の作品と</span><br className="hidden md:block" />
+              <span className="inline-block">"副業デビューの一歩"を一緒に作ります。</span>
+            </motion.p>
+            <motion.div variants={staggerItem} className="flex flex-wrap gap-3 mb-9 text-sm text-warm-brown">
+              <span className="bg-white/70 backdrop-blur-sm border border-warm-brown/10 px-3.5 py-1.5 rounded-full">25〜39歳</span>
+              <span className="bg-white/70 backdrop-blur-sm border border-warm-brown/10 px-3.5 py-1.5 rounded-full">会社員・パート</span>
+              <span className="bg-white/70 backdrop-blur-sm border border-warm-brown/10 px-3.5 py-1.5 rounded-full">完全未経験OK</span>
+            </motion.div>
+            <motion.div variants={staggerItem} className="relative inline-block">
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-white text-coral border border-coral/30 text-xs font-medium px-3 py-0.5 rounded-full shadow-soft whitespace-nowrap z-10">
+                相談無料・オンライン
+              </span>
               <Button
                 size="lg"
                 onClick={() => setShowLineModal(true)}
@@ -172,59 +247,55 @@ export default function Home() {
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </motion.div>
+          </motion.div>
 
-            <motion.div
-              {...fadeInUp}
-              transition={{ delay: 0.15, duration: 0.5 }}
-              className="order-1 lg:order-2"
-            >
-              <div className="relative">
-                <div className="rounded-3xl overflow-hidden shadow-soft-lg">
-                  <img
-                    src="/images/hero-new.webp"
-                    alt="自宅で動画編集を学ぶ女性"
-                    className="w-full h-auto object-cover"
-                    width={1400}
-                    height={781}
-                    fetchPriority="high"
-                  />
-                </div>
-                {/* Floating badge */}
-                <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl p-4 shadow-soft-lg hidden md:block">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-dusty-pink-light rounded-full flex items-center justify-center">
-                      <Clock className="h-5 w-5 text-coral" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-warm-gray">1日の学習時間</p>
-                      <p className="text-lg text-warm-brown font-medium">約2時間〜</p>
-                    </div>
-                  </div>
-                </div>
+          {/* Floating badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            className="absolute bottom-16 right-8 lg:right-16 bg-white/95 rounded-2xl p-4 shadow-soft-lg hidden md:block animate-float"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-dusty-pink-light rounded-full flex items-center justify-center">
+                <Clock className="h-5 w-5 text-coral" />
               </div>
-            </motion.div>
-          </div>
+              <div>
+                <p className="text-sm text-warm-gray">1日の学習時間</p>
+                <p className="text-lg text-warm-brown font-medium">約2時間〜</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* S2: Concerns Section */}
-      <section className="py-16 md:py-24 bg-white">
+      <section className="relative z-10 -mt-8 rounded-t-[2.5rem] md:rounded-t-[4rem] py-16 md:py-24 bg-white">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-4">
-              <span className="inline-block">こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、</span>
-              <span className="inline-block">抱えていませんか？</span>
+              <Sparkles>
+                <span className="inline-block">こんな<span className="font-accent text-coral text-3xl md:text-4xl lg:text-5xl">"モヤモヤ"</span>、</span>
+                <span className="inline-block">抱えていませんか？</span>
+              </Sparkles>
             </h2>
           </motion.div>
 
-          <motion.div {...fadeInUp} className="max-w-2xl mx-auto space-y-4 mb-12">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-50px" }}
+            className="max-w-2xl mx-auto space-y-4 mb-12"
+          >
             {[
               "副業に興味はあるけど、何から始めればいいか分からない",
               "動画編集に挑戦してみたいけど、一人で続けられる自信がない",
               "スキルを身につけて、少しでもいいから自分で稼いでみたい",
               "毎日が仕事と家の往復で、何か新しいことを始めるきっかけが欲しい",
             ].map((concern, index) => (
-              <label
+              <motion.label
+                variants={staggerItem}
                 key={index}
                 className="flex items-start gap-4 p-4 bg-dusty-pink-light/30 rounded-2xl cursor-pointer hover:bg-dusty-pink-light/50 transition-colors"
                 onClick={() => toggleCheck(index)}
@@ -236,7 +307,7 @@ export default function Home() {
                   className="concern-checkbox mt-0.5 shrink-0"
                 />
                 <span className="text-warm-brown leading-relaxed">{concern}</span>
-              </label>
+              </motion.label>
             ))}
           </motion.div>
 
@@ -256,12 +327,12 @@ export default function Home() {
       {/* S3: Concept Section */}
       <section className="py-16 md:py-24 bg-ivory">
         <div className="container">
-          <motion.div {...fadeInUp} className="max-w-3xl mx-auto text-center">
-            <p className="font-accent text-2xl md:text-3xl text-coral mb-6">Our Concept</p>
+          <motion.div {...fadeInUp} className="max-w-4xl mx-auto text-center">
+            <p className="section-label mb-6">Our Concept</p>
             <h2 className="text-xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-10">
               <span className="block mb-1 md:mb-2 lg:mb-4">会社に縛られず、</span>
               <span className="block mb-1 md:mb-2 lg:mb-4"><span className="text-coral">"自分のペースで稼ぐ力"</span>を持つ</span>
-              <span className="block">女性を増やすための、<br className="md:hidden" />動画編集スクールです。</span>
+              <span className="block"><span className="inline-block">女性を増やすための、</span><br className="md:hidden" /><span className="inline-block">動画編集スクールです。</span></span>
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6 text-left">
@@ -292,7 +363,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Transformation</p>
+            <p className="section-label mb-3">Transformation</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
               3ヶ月後、あなたはこう変わる
             </h2>
@@ -327,7 +398,13 @@ export default function Home() {
             </div>
 
             {/* After - 3 levels */}
-            <div className="space-y-4">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-50px" }}
+              className="space-y-4"
+            >
               {[
                 {
                   level: "最低ライン",
@@ -349,7 +426,7 @@ export default function Home() {
                   color: "bg-coral/10 border-2 border-coral/30",
                 },
               ].map((item, index) => (
-                <div key={index} className={`${item.color} rounded-2xl p-6`}>
+                <motion.div variants={staggerItem} key={index} className={`${item.color} rounded-2xl p-6`}>
                   <div className="flex items-center gap-3 mb-2">
                     <span className="bg-coral text-white text-sm font-medium px-3 py-1 rounded-full">After</span>
                     <span className="text-coral font-medium">【{item.level}】{item.title}</span>
@@ -358,9 +435,9 @@ export default function Home() {
                     {item.description}
                     {item.note && <span className="text-sm text-warm-gray ml-1">{item.note}</span>}
                   </p>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -369,7 +446,7 @@ export default function Home() {
       <section id="curriculum" className="py-16 md:py-24 bg-ivory">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Curriculum</p>
+            <p className="section-label mb-3">Curriculum</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-4">
               <span className="inline-block">未経験からでも安心！</span><br className="md:hidden" />
               <span className="inline-block">ゴールから逆算した</span>
@@ -377,8 +454,14 @@ export default function Home() {
             </h2>
           </motion.div>
 
-          <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
-            <div className="relative">
+          <div className="max-w-3xl mx-auto">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-50px" }}
+              className="relative"
+            >
               {/* Timeline line — ドット中心（モバイル24px / md36px）に合わせる */}
               <div className="absolute left-[23px] md:left-[35px] top-0 bottom-0 w-0.5 bg-dusty-pink" />
 
@@ -408,7 +491,7 @@ export default function Home() {
                   icon: FileText,
                 },
               ].map((phase, index) => (
-                <div key={index} className="relative pl-16 md:pl-20 pb-10 last:pb-0">
+                <motion.div variants={staggerItem} key={index} className="relative pl-16 md:pl-20 pb-10 last:pb-0">
                   {/* Timeline dot */}
                   <div className="absolute left-3 md:left-5 top-0 w-6 h-6 md:w-8 md:h-8 bg-coral rounded-full flex items-center justify-center shadow-soft">
                     <phase.icon className="h-3 w-3 md:h-4 md:w-4 text-white" />
@@ -419,10 +502,10 @@ export default function Home() {
                     <h3 className="text-lg md:text-xl text-warm-brown font-medium mt-1 mb-2">{phase.title}</h3>
                     <p className="text-warm-gray leading-relaxed text-sm md:text-base">{phase.description}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -430,13 +513,19 @@ export default function Home() {
       <section id="support" className="py-16 md:py-24 bg-white">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Support</p>
+            <p className="section-label mb-3">Support</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
               あなたが挫折しないための、<br className="md:hidden" />4つのサポート体制
             </h2>
           </motion.div>
 
-          <motion.div {...fadeInUp} className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto"
+          >
             {[
               {
                 icon: Users,
@@ -459,15 +548,17 @@ export default function Home() {
                 description: "卒業後も、月3,000円のオンライン部室で、仲間との情報交換や勉強会を続けられます。",
               },
             ].map((support, index) => (
-              <Card key={index} className="border-0 shadow-soft hover:shadow-soft-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="w-12 h-12 bg-dusty-pink-light rounded-2xl flex items-center justify-center mb-4">
-                    <support.icon className="h-6 w-6 text-coral" />
-                  </div>
-                  <h3 className="text-lg text-warm-brown font-medium mb-2">{support.title}</h3>
-                  <p className="text-warm-gray text-sm leading-relaxed">{support.description}</p>
-                </CardContent>
-              </Card>
+              <motion.div variants={staggerItem} key={index}>
+                <Card className="group border-0 shadow-soft card-lift h-full">
+                  <CardContent className="p-6">
+                    <div className="w-12 h-12 bg-dusty-pink-light rounded-2xl flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+                      <support.icon className="h-6 w-6 text-coral" />
+                    </div>
+                    <h3 className="text-lg text-warm-brown font-medium mb-2">{support.title}</h3>
+                    <p className="text-warm-gray text-sm leading-relaxed">{support.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </motion.div>
 
@@ -478,8 +569,8 @@ export default function Home() {
                 src="/images/online-class.webp"
                 alt="オンラインで一緒に学ぶ仲間たち"
                 className="w-full h-auto"
-                width={1600}
-                height={893}
+                width={1536}
+                height={1024}
                 loading="lazy"
               />
             </div>
@@ -491,7 +582,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-beige/30">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Who is this for?</p>
+            <p className="section-label mb-3">For You</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
               受講にあたってのご案内
             </h2>
@@ -525,7 +616,7 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Success Story</p>
+            <p className="section-label mb-3">Success Story</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-2">
               3ヶ月で変わった、私のストーリー
             </h2>
@@ -542,7 +633,7 @@ export default function Home() {
                     alt="Aさん"
                     className="w-full h-full object-cover"
                     width={320}
-                    height={179}
+                    height={320}
                     loading="lazy"
                   />
                 </div>
@@ -591,7 +682,7 @@ export default function Home() {
       <section id="price" className="py-16 md:py-24 bg-ivory">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Pricing</p>
+            <p className="section-label mb-3">Pricing</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
               料金プラン
             </h2>
@@ -604,8 +695,8 @@ export default function Home() {
               </div>
               <CardContent className="!p-0 bg-white">
                 <div className="text-center px-6 py-8 md:px-10 md:py-10 border-b border-warm-gray/20">
-                  <p className="text-5xl md:text-6xl text-warm-brown font-medium">
-                    98,000<span className="text-xl">円</span>
+                  <p className="text-5xl md:text-6xl text-warm-brown font-medium font-en">
+                    <CountUp to={98000} /><span className="text-xl font-body">円</span>
                   </p>
                   <p className="text-sm text-warm-gray mt-3">（税込）</p>
                 </div>
@@ -658,13 +749,19 @@ export default function Home() {
       <section className="py-16 md:py-24 bg-white">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">How to Start</p>
+            <p className="section-label mb-3">How to Start</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
               受講開始までの簡単5ステップ
             </h2>
           </motion.div>
 
-          <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-50px" }}
+            className="max-w-3xl mx-auto"
+          >
             {[
               { step: 1, title: "無料個別相談", description: "まずは無料個別相談にお申し込みください。（30〜45分／オンライン）不安なことは何でも聞いてください。" },
               { step: 2, title: "お申込み・決済", description: "内容にご納得いただけたら、専用フォームからお申込み・ご入金をお願いします。" },
@@ -672,9 +769,9 @@ export default function Home() {
               { step: 4, title: "8週間の受講", description: "週1回の講義と課題、質問サポートを活用し、あなたのペースで作品とポートフォリオを完成させます。" },
               { step: 5, title: "卒業", description: "卒業おめでとうございます！希望者はコミュニティプランで、引き続き一緒に頑張りましょう。" },
             ].map((item, index) => (
-              <div key={index} className="flex gap-4 md:gap-6">
+              <motion.div variants={staggerItem} key={index} className="flex gap-4 md:gap-6">
                 <div className="shrink-0 flex flex-col items-center">
-                  <div className="w-10 h-10 md:w-12 md:h-12 bg-coral text-white rounded-full flex items-center justify-center font-medium text-lg">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-coral text-white rounded-full flex items-center justify-center font-medium text-lg font-en">
                     {item.step}
                   </div>
                   {index < 4 && <div className="w-0.5 flex-1 bg-dusty-pink" />}
@@ -683,7 +780,7 @@ export default function Home() {
                   <h3 className="text-warm-brown font-medium mb-1">{item.title}</h3>
                   <p className="text-warm-gray text-sm leading-relaxed">{item.description}</p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>
@@ -693,7 +790,7 @@ export default function Home() {
       <section id="faq" className="py-16 md:py-24 bg-beige/30">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">FAQ</p>
+            <p className="section-label mb-3">FAQ</p>
             <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
               よくあるご質問
             </h2>
@@ -749,12 +846,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* S12: Instructor Section */}
-      <section className="py-16 md:py-24 bg-white">
+      {/* S12: Instructor Section — ダーク反転でページに緩急をつける */}
+      <section className="relative z-10 -mt-8 rounded-t-[2.5rem] md:rounded-t-[4rem] py-16 md:py-24 pb-24 md:pb-32 bg-warm-brown">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <p className="font-accent text-xl text-coral mb-2">Instructor</p>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl text-warm-brown font-medium">
+            <p className="section-label mb-3 !text-coral-light">Instructor</p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl text-ivory font-medium">
               講師紹介
             </h2>
           </motion.div>
@@ -762,21 +859,21 @@ export default function Home() {
           <motion.div {...fadeInUp} className="max-w-3xl mx-auto">
             <div className="grid md:grid-cols-[200px_1fr] gap-8 items-start">
               <div className="mx-auto md:mx-0">
-                <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg">
+                <div className="w-48 h-48 rounded-3xl overflow-hidden shadow-soft-lg ring-4 ring-white/10">
                   <img
                     src="/images/instructor-new.webp"
                     alt="講師"
                     className="w-full h-full object-cover"
                     width={600}
-                    height={1075}
+                    height={900}
                     loading="lazy"
                   />
                 </div>
               </div>
 
               <div>
-                <h3 className="text-xl text-warm-brown font-medium mb-1">◯◯ ◯◯</h3>
-                <p className="text-coral text-sm mb-4">女性向け動画編集・副業サポーター</p>
+                <h3 className="text-xl text-ivory font-medium mb-1">◯◯ ◯◯</h3>
+                <p className="text-coral-light text-sm mb-4">女性向け動画編集・副業サポーター</p>
 
                 <div className="space-y-2 mb-6">
                   {[
@@ -784,8 +881,8 @@ export default function Home() {
                     "未経験から動画編集を学び、1年で独立",
                     "法人・個人問わず100本以上の動画制作実績",
                   ].map((item, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm text-warm-gray">
-                      <ChevronRight className="h-4 w-4 text-coral" />
+                    <div key={index} className="flex items-center gap-2 text-sm text-beige">
+                      <ChevronRight className="h-4 w-4 text-coral-light" />
                       <span>{item}</span>
                     </div>
                   ))}
@@ -794,14 +891,14 @@ export default function Home() {
             </div>
 
             {/* Message */}
-            <div className="mt-8 bg-dusty-pink-light/40 rounded-3xl p-6 md:p-8 relative">
+            <div className="mt-8 bg-white/[0.07] border border-white/10 rounded-3xl p-6 md:p-8 relative">
               <div className="absolute -top-3 left-8 bg-coral text-white text-sm px-4 py-1 rounded-full">
                 講師からのメッセージ
               </div>
-              <p className="font-accent text-xl md:text-2xl text-coral mt-2 mb-4">
+              <p className="font-accent text-xl md:text-2xl text-coral-light mt-2 mb-4">
                 自分のペースで働けるって、こんなに楽しい。
               </p>
-              <p className="text-warm-brown leading-loose">
+              <p className="text-ivory/90 leading-loose">
                 「かつての私は、会社に縛られて心身ともに疲弊していました。そんな時に出会ったのが動画編集です。
                 <br /><br />
                 自分のスキルで、自分のペースで仕事を選べるようになったことで、心から人生が楽しいと思えるようになりました。
@@ -814,10 +911,10 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 md:py-24 bg-gradient-to-b from-dusty-pink-light/50 to-ivory">
+      <section className="relative z-10 -mt-8 rounded-t-[2.5rem] md:rounded-t-[4rem] py-16 md:py-24 bg-gradient-to-b from-dusty-pink-light to-ivory">
         <div className="container">
           <motion.div {...fadeInUp} className="text-center max-w-3xl mx-auto">
-            <p className="font-accent text-2xl md:text-3xl text-coral mb-4">Start Your Journey</p>
+            <p className="section-label mb-4">Start Your Journey</p>
             <h2 className="text-xl md:text-3xl lg:text-4xl text-warm-brown font-medium mb-6">
               <span className="block mb-1 md:mb-2 lg:mb-4">まずは無料個別相談で、</span>
               <span className="block">あなたの<br className="md:hidden" />"モヤモヤ"を聞かせてください。</span>
